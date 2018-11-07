@@ -1,0 +1,25 @@
+#服务器配置
+server:
+  port: 8088
+  servlet:
+    context-path: /
+
+#spring全局配置
+spring:
+  profiles:
+    active: mybatis,shiro
+  resources:
+    #配置全局静态资源文件夹,static-locations配置时比static-path-pattern优先级高，
+    #static-locations: classpath:/static/
+  mvc:
+    #springmvc风格静态资源匹配路径
+    static-path-pattern: /static/**
+
+  #thymeleaf模板引擎
+  thymeleaf:
+    mode: HTML
+    encoding: UTF-8
+    #开发时关闭缓存,不然没法看到实时页面
+    cache: false
+    servlet:
+      content-type: text/html

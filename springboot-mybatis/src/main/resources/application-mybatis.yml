@@ -1,0 +1,19 @@
+#spring配置
+spring:
+  #数据源
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: XS
+    password: XS123456
+    url: jdbc:mysql://127.0.0.1:3306/test_database?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
+    # 使用druid数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+
+#mybatis配置
+mybatis:
+  configuration:
+    #开启驼峰命名：javabean->uId database->u_id
+    map-underscore-to-camel-case: true
+    #开启mybatis控制台日志输出
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
