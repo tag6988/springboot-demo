@@ -1,6 +1,7 @@
 package com.tag.springbootshiro.config;
 
 import com.tag.springbootshiro.security.ShiroRealm;
+import com.tag.springbootshiro.security.ShiroRealm2;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authc.pam.AllSuccessfulStrategy;
 import org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy;
@@ -32,21 +33,21 @@ public class ShiroConfig {
     public SecurityManager securityManager() {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         //单一realm验证
-        securityManager.setRealm(shiroRealm());
+        //securityManager.setRealm(shiroRealm());
         //多realm验证
         //securityManager.setRealms(Arrays.asList(shiroRealm(), shiroRealm()));
 
         //第二种方式实现多realm注册，直接在bean中注入modularrealmauthenticator
-        /*ModularRealmAuthenticator authenticator = new ModularRealmAuthenticator();
-        authenticator.setRealms(Arrays.asList(shiroRealm(), shiroRealm()));
-        securityManager.setAuthenticator(authenticator);*/
+        ModularRealmAuthenticator authenticator = new ModularRealmAuthenticator();
+        authenticator.setRealms(Arrays.asList(shiroRealm(), shiroRealm2()));
+        securityManager.setAuthenticator(authenticator);
         /**
          * 认证策略,使用多realm认证时，认证策略需要在authenticator中声明
          * AllSuccessfulStrategy:全部需要认证
          * FirstSuccessfulStrategy:只要一个realm认证成功即可，返回第一个realm的验证信息
          * AtLeastOneSuccessfulStrategy:只要有一个realm认证成功即可，返回所有realm的验证信息
          */
-        //authenticator.setAuthenticationStrategy(new AllSuccessfulStrategy());
+        authenticator.setAuthenticationStrategy(new FirstSuccessfulStrategy());
 
         return securityManager;
     }
@@ -60,6 +61,14 @@ public class ShiroConfig {
         ShiroRealm shiroRealm = new ShiroRealm();
         shiroRealm.setCredentialsMatcher(hashMatcher());
         return shiroRealm;
+    }
+    public ShiroRealm2 shiroRealm2() {
+        ShiroRealm2 shiroRealm2 = new ShiroRealm2();
+        HashedCredentialsMatcher hashMatcher = new HashedCredentialsMatcher();
+        hashMatcher.setHashAlgorithmName("SHA");
+        hashMatcher.setHashIterations(10);
+        shiroRealm2.setCredentialsMatcher(hashMatcher());
+        return shiroRealm2;
     }
 
     /**

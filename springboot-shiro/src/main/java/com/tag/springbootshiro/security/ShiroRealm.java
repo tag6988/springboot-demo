@@ -1,7 +1,10 @@
 package com.tag.springbootshiro.security;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.AuthenticationInfo;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.realm.AuthenticatingRealm;
@@ -22,10 +25,10 @@ public class ShiroRealm extends AuthenticatingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(
             AuthenticationToken authcToken) throws AuthenticationException {
         //当前用户输入的登录信息
-        UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
+        /*UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
         String name = token.getUsername();
         String password = String.valueOf(token.getPassword());
-        log.info("username:" + name + " , " + "password:" + password);
+        log.info("username:" + name + " , " + "password:" + password);*/
         //数据库查询账号密码
         String realName = "tag";
         String realPassword = "1234";
