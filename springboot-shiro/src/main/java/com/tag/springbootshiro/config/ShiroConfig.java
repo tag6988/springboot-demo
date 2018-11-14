@@ -1,5 +1,6 @@
 package com.tag.springbootshiro.config;
 
+import com.tag.springbootshiro.security.RoleRealm;
 import com.tag.springbootshiro.security.ShiroRealm;
 import com.tag.springbootshiro.security.ShiroRealm2;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
@@ -7,9 +8,12 @@ import org.apache.shiro.authc.pam.AllSuccessfulStrategy;
 import org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy;
 import org.apache.shiro.authc.pam.FirstSuccessfulStrategy;
 import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
+import org.apache.shiro.authz.Authorizer;
+import org.apache.shiro.authz.ModularRealmAuthorizer;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -25,6 +29,9 @@ import java.util.Map;
 @Configuration
 public class ShiroConfig {
 
+    @Autowired
+    private ShiroRealm shiroRealm;
+
     /**
      * Shiro 的使用中只有一个SecurityManager,用于管理所有的安全操作
      * 这里生成SecurityManager 并配置Realm
@@ -39,7 +46,7 @@ public class ShiroConfig {
 
         //第二种方式实现多realm注册，直接在bean中注入modularrealmauthenticator
         ModularRealmAuthenticator authenticator = new ModularRealmAuthenticator();
-        authenticator.setRealms(Arrays.asList(shiroRealm(), shiroRealm2()));
+        authenticator.setRealms(Arrays.asList(shiroRealm, shiroRealm2()));
         securityManager.setAuthenticator(authenticator);
         /**
          * 认证策略,使用多realm认证时，认证策略需要在authenticator中声明
@@ -49,6 +56,11 @@ public class ShiroConfig {
          */
         authenticator.setAuthenticationStrategy(new FirstSuccessfulStrategy());
 
+        //权限验证处理器
+        ModularRealmAuthorizer authorizer = new ModularRealmAuthorizer();
+        authorizer.setRealms(Arrays.asList(roleRealm()));
+        securityManager.setAuthorizer(authorizer);
+
         return securityManager;
     }
 
@@ -57,11 +69,14 @@ public class ShiroConfig {
      *
      * @return
      */
+    @Bean
     public ShiroRealm shiroRealm() {
         ShiroRealm shiroRealm = new ShiroRealm();
         shiroRealm.setCredentialsMatcher(hashMatcher());
         return shiroRealm;
     }
+
+    @Bean
     public ShiroRealm2 shiroRealm2() {
         ShiroRealm2 shiroRealm2 = new ShiroRealm2();
         HashedCredentialsMatcher hashMatcher = new HashedCredentialsMatcher();
@@ -69,6 +84,10 @@ public class ShiroConfig {
         hashMatcher.setHashIterations(10);
         shiroRealm2.setCredentialsMatcher(hashMatcher());
         return shiroRealm2;
+    }
+
+    public RoleRealm roleRealm() {
+        return new RoleRealm();
     }
 
     /**
@@ -99,18 +118,23 @@ public class ShiroConfig {
         // 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
         shiroFilterFactoryBean.setLoginUrl("/login/loginPage");
         // 登录成功后要跳转的链接
-        //shiroFilterFactoryBean.setSuccessUrl("/login/index6");
+        //shiroFilterFactoryBean.setSuccessUrl("/login/index");
         //未授权界面;
-        //shiroFilterFactoryBean.setUnauthorizedUrl("/login/loginPage");
+        shiroFilterFactoryBean.setUnauthorizedUrl("/login/unauth");
 
         //配置静态资源放行
         filterChainDefinitionMap.put("/static/**", "anon");
         filterChainDefinitionMap.put("/login/loginIn", "anon");
+        filterChainDefinitionMap.put("/login/loginPage", "anon");
 
+        //设置页面权限验证
+        filterChainDefinitionMap.put("/userHome/**", "roles[admin]");
         //<!-- 过滤链定义，从上向下顺序执行，一般将 /**放在最为下边 -->:这是一个坑呢，一不小心代码就不好使了;
         //<!-- authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问-->
         filterChainDefinitionMap.put("/**", "authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }
+
+
 }

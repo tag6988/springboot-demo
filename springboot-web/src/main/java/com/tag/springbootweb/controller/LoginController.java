@@ -1,5 +1,6 @@
 package com.tag.springbootweb.controller;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 
 /**
@@ -24,15 +26,21 @@ public class LoginController {
 
     @ResponseBody
     @GetMapping("/index")
-    public String gotoIndex(){
+    public String gotoIndex() {
         return "系统首页";
+    }
+
+    @ResponseBody
+    @GetMapping("/unauth")
+    public String unAuthPage() {
+        return "未授权页面";
     }
 
     @GetMapping("/loginPage")
     public String loginPage() {
         Subject subject = SecurityUtils.getSubject();
         if (subject.isAuthenticated()) {
-            log.info("用户已登录："+subject.getSession().getId());
+            log.info("用户已登录：" + subject.getSession().getId());
             return "redirect:index";
         } else {
             log.info("用户未登录，进入登录页面");
@@ -48,6 +56,7 @@ public class LoginController {
         try {
             subject.login(token);
             log.info("登陆成功：" + username);
+            log.error("aasaasss阿萨斯");
             return "success";
         } catch (Exception e) {
             e.printStackTrace();

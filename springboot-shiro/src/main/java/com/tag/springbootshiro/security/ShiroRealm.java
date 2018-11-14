@@ -1,15 +1,15 @@
 package com.tag.springbootshiro.security;
 
+import com.tag.springbootmybatis.beans.UserInfo;
+import com.tag.springbootshiro.service.LoginService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
-import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.realm.AuthenticatingRealm;
-import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.annotation.Resource;
 
 /**
  * @author tag
@@ -18,6 +18,10 @@ import org.apache.shiro.util.ByteSource;
  */
 @Slf4j
 public class ShiroRealm extends AuthenticatingRealm {
+
+    @Autowired
+    private LoginService loginService;
+
     /**
      * 用于判断登录信息的方法
      */
@@ -25,13 +29,16 @@ public class ShiroRealm extends AuthenticatingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(
             AuthenticationToken authcToken) throws AuthenticationException {
         //当前用户输入的登录信息
-        /*UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
+        UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
         String name = token.getUsername();
         String password = String.valueOf(token.getPassword());
-        log.info("username:" + name + " , " + "password:" + password);*/
+        log.info("username:" + name + " , " + "password:" + password);
+        log.info("登录验证->表单"+ShiroRealm.class.getName());
+        UserInfo userInfo = this.loginService.getUserInfo("tag");
         //数据库查询账号密码
-        String realName = "tag";
-        String realPassword = "1234";
+        String realName = userInfo.getUsername();
+        String realPassword = userInfo.getPassword();
+        log.info("登录验证->数据库"+userInfo);
         //加盐
         ByteSource byteSource = ByteSource.Util.bytes(realName);
         //加密
@@ -39,12 +46,5 @@ public class ShiroRealm extends AuthenticatingRealm {
         //return new SimpleAuthenticationInfo(realName, md5Password, getName());
         //前端数据通过加盐加密处理
         return new SimpleAuthenticationInfo(realName, md5Password, byteSource, getName());
-    }
-
-    /**
-     * 这里是用来返回用户权限的方法
-     */
-    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        return null;
     }
 }

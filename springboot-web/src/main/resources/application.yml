@@ -7,13 +7,20 @@ server:
 #spring全局配置
 spring:
   profiles:
-    active: mybatis,shiro
+    active: mybatis
   resources:
     #配置全局静态资源文件夹,static-locations配置时比static-path-pattern优先级高，
-    #static-locations: classpath:/static/
+    static-locations: classpath:/static
   mvc:
-    #springmvc风格静态资源匹配路径
     static-path-pattern: /static/**
+    #Spring Boot 默认将 /** 所有访问映射到以下目录：
+    #classpath:/static
+    #classpath:/public
+    #classpath:/resources
+    #classpath:/META-INF/resources
+    #通过spring.mvc.static-path-pattern这种方式配置，会使Spring Boot的默认配置失效，也就是说，/public /resources 等默认配置不能使用。
+    #配置中配置了静态模式为/static/，就只能通过/static/来访问。
+    #并且该配置只能匹配一个路径，在多个配置文件中配置会新城覆盖效应，若需要配置多个则需要继承WebMvcConfigurerAdapter重写addResourceHandlers方法即可
 
   #thymeleaf模板引擎
   thymeleaf:
@@ -23,3 +30,8 @@ spring:
     cache: false
     servlet:
       content-type: text/html
+
+logging:
+  #加载指定logback配置文件
+  config: classpath:logback-config.xml
+  #logback其他配置

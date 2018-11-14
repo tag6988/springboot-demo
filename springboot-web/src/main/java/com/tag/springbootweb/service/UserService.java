@@ -1,7 +1,7 @@
 package com.tag.springbootweb.service;
 
 import com.tag.springbootmybatis.beans.User;
-import com.tag.springbootmybatis.mapper.UserMapper;
+import com.tag.springbootmybatis.mapper.test.UserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

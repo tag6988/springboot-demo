@@ -1,11 +1,10 @@
-package com.tag.springbootmybatis.mapper;
+package com.tag.springbootmybatis.mapper.test;
 
 import com.tag.springbootmybatis.beans.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
-import org.mybatis.spring.annotation.MapperScan;
 
 import java.util.List;
 

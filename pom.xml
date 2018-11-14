@@ -21,6 +21,7 @@
         <module>springboot-shiro</module>
         <module>springboot-mybatis</module>
         <module>springboot-web</module>
+        <module>springboot-swagger</module>
     </modules>
 
     <properties>
