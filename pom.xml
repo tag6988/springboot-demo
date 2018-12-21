@@ -22,6 +22,7 @@
         <module>springboot-mybatis</module>
         <module>springboot-web</module>
         <module>springboot-swagger</module>
+        <module>springboot-jpa</module>
     </modules>
 
     <properties>
@@ -42,6 +43,15 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+        <!--idea自带热部署工具-->
+        <!--<dependency> &lt;!&ndash;添加热部署依赖 &ndash;&gt;-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-devtools</artifactId>-->
+        <!--</dependency>-->
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
@@ -56,6 +66,10 @@
                 <configuration>
                     <skipTests>true</skipTests>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

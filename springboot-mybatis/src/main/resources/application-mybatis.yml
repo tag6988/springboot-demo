@@ -39,3 +39,12 @@ mybatis:
 #在多数据源的情况下会使用多个mybatis的@configuration配置类，
 #他们相当于mybatis-config.xml,并且他们内部会有一些默认的mybatis配置，
 #优先级高于普通配置文件，所以配置文件中的mybatis配置将不会生效，所以需要导入配置文件到配置类当中
+
+#分页插件
+pagehelper:
+  #数据库不同分页原理也不同
+  helperDialect: mysql
+#  reasonable: true
+#  supportMethodsArguments: true
+#  pageSizeZero: true
+#  params: count=countSql

@@ -7,7 +7,7 @@ server:
 #spring全局配置
 spring:
   profiles:
-    active: mybatis
+    active: mybatis,jpa
   resources:
     #配置全局静态资源文件夹,static-locations配置时比static-path-pattern优先级高，
     static-locations: classpath:/static

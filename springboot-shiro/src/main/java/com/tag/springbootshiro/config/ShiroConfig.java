@@ -112,7 +112,7 @@ public class ShiroConfig {
         // 必须设置 SecurityManager
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         //拦截器.
-        Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
+        Map<String, String> filterChainDefinitionMap = new LinkedHashMap();
         //配置退出过滤器,其中的具体的退出代码Shiro已经替我们实现了
         filterChainDefinitionMap.put("/logout", "logout");
         // 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面

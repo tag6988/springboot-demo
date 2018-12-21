@@ -23,7 +23,8 @@ public interface UserMapper {
     @Select("select * from user where u_id = #{u_id}")
     User selectUserById(int u_id);
 
-    @Insert("insert into user(u_id,u_name,u_age,u_tell) values (#{uId}, #{uName}, #{uAge}, #{uTell})")
+    @Insert("insert into user(u_id,u_name,u_age,u_tell) values (#{uId}, " +
+            "#{uName}, #{uAge}, #{uTell})")
     @Options(useGeneratedKeys = true, keyColumn = "u_id", keyProperty = "uId")
     void saveUser(User user);
 

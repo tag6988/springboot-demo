@@ -27,7 +27,7 @@ public class RoleRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         log.info("页面权限验证->"+RoleRealm.class.getName());
         //设置权限
-        HashSet<String> set = new HashSet<>();
+        HashSet<String> set = new HashSet();
         set.add("admin");
         //数据库查询账号密码
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo(set);

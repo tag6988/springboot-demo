@@ -52,7 +52,8 @@ public class LoginController {
     @PostMapping("/loginIn")
     public String loginIn(String username, String password) {
         Subject subject = SecurityUtils.getSubject();
-        UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+        UsernamePasswordToken token = new UsernamePasswordToken(username,
+                password);
         try {
             subject.login(token);
             log.info("登陆成功：" + username);
